@@ -1,0 +1,58 @@
+swagger: '2.0'
+info:
+  title: Orion - Customer Dashboard API
+  version: 1.0.0
+paths:   
+  /devices:
+    get:
+      summary: Detailed list all devices for given customer id
+      parameters:
+        - in: query
+          name: customer-id
+          type: string
+          required: true
+        - in: query
+          name: device-type
+          type: string
+          required: false
+        - in: query
+          name: device-ids
+          type: array
+          items:
+            type: string
+          required: false123
+      responses:
+        200:
+          description: Messages retrieved successfully
+        404:
+          description: Queue not found
+        500:
+          description: Server error
+  /devices/{device-id}:
+    get:  
+      summary: Get details for given device id
+      parameters:
+        - in: query
+          name: device-id
+          type: string
+      responses:
+        200:
+          description: Messages retrieved successfully
+        404:
+          description: Queue not found
+        500:
+          description: Server error
+  /customer:
+    get:
+      summary: List all device id for given customer id
+      parameters:
+        - in: query
+          name: customer-id
+          type: string
+      responses:
+        200:
+          description: Messages retrieved successfully
+        404:
+          description: Queue not found
+        500:
+          description: Server error

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .list {
+            width: 45%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="list">
+            <h1>Device_ID:</h1>
+            <ul>
+                {% for device in Device %}
+                <li>{{ device}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    
+        <div class="list"> 
+            <h1>Customer_Name:</h1>
+            <ul>
+                {% for cust in Name %}
+                <li>{{ cust }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="list"> 
+            <h1>Device_Type:</h1>
+            <ul>
+                {% for type in Type %}
+                <li>{{ type }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+    </body>
+</html>
