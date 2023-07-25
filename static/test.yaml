@@ -20,7 +20,7 @@ paths:
           type: array
           items:
             type: string
-          required: false123
+          required: false
       responses:
         200:
           description: Messages retrieved successfully
