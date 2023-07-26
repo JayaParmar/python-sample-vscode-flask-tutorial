@@ -7,7 +7,7 @@ workers = 3
 threads = 2
 
 # Host and port on which Gunicorn will listen.
-bind = '0.0.0.0:5000'
+bind = '0.0.0.0:5555'
 
 # Log level.
 loglevel = 'debug'
@@ -17,4 +17,4 @@ timeout = 3600
 
 # The WSGI application to be run by Gunicorn.
 # Replace 'app' with the actual name of your Flask app object.
-app = 'message_producer:app'
+app = 'test_tools:app'
