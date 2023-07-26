@@ -1,8 +1,8 @@
 import requests
 from datetime import datetime 
 import os
-
 import socket
+import time
 
 process_id = os.getpid()
 # reset orion-ws and orion-answer queue
@@ -34,7 +34,15 @@ def empty_messages_on_queue():
     while not empty:
         data = {"queue": 'orion-ws', 
                 }
-        resp = requests.post(f'http://localhost:5555/queue/take', json=data)
+        not_ready = True
+        while not_ready:
+            try:
+                resp = requests.post(f'http://localhost:5555/queue/take', json=data)
+                not_ready = False
+            except Exception as e:
+                print(e)
+                time.sleep(10)
+                pass         
         if resp.json().get('message') == "Queue is empty.":
             empty = True
         else:
@@ -60,10 +68,11 @@ def empty_messages_on_queue():
             resp = requests.post(f'http://localhost:5555/queue/put', json=data)
             print(resp)
 
+
 if __name__ == '__main__':
     # create_queues()
-    reset_queues()
-    put_messages_on_queue()
+    # reset_queues()
+    # put_messages_on_queue()
     empty_messages_on_queue()
 
 
