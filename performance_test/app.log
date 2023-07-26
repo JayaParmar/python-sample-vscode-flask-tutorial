@@ -1,0 +1,58 @@
+{
+  "message": "Queue reset."
+}
+
+{
+  "message": "Queue reset."
+}
+
+i is now 188934
+<Response [201]>
+i is now 164070
+<Response [201]>
+i is now 164496
+<Response [201]>
+i is now 3000090
+<Response [201]>
+i is now 100002
+<Response [201]>
+i is now 3010
+<Response [201]>
+i is now 5010
+<Response [201]>
+i is now 267038
+<Response [201]>
+i is now 267038
+<Response [201]>
+i is now 1240608
+<Response [201]>
+Got a reply from Orion WS  
+{'customer devices': [{'DeviceId': '9105000044', 'iv_External_Id__c': '188934'}]}
+<Response [201]>
+Got a reply from Orion WS  
+{'customer devices': [{'DeviceId': '9105000551', 'iv_External_Id__c': '164070'}]}
+<Response [201]>
+Got a reply from Orion WS  
+{'customer devices': [{'DeviceId': '2309857521', 'iv_External_Id__c': '164496'}]}
+<Response [201]>
+Got a reply from Orion WS  
+{'customer devices': [{'DeviceId': None, 'iv_External_Id__c': '3000090'}]}
+<Response [201]>
+Got a reply from Orion WS  
+{'customer devices': [{'DeviceId': '4002001445', 'iv_External_Id__c': '100002'}]}
+<Response [201]>
+Got a reply from Orion WS  
+{'customer devices': [{'DeviceId': '1120007137', 'iv_External_Id__c': '3010'}]}
+<Response [201]>
+Got a reply from Orion WS  
+{'customer devices': [{'DeviceId': '256029', 'iv_External_Id__c': '5010'}]}
+<Response [201]>
+Got a reply from Orion WS  
+{'customer devices': [{'DeviceId': 'LD01699', 'iv_External_Id__c': '267038'}]}
+<Response [201]>
+Got a reply from Orion WS  
+{'customer devices': [{'DeviceId': 'LD01699', 'iv_External_Id__c': '267038'}]}
+<Response [201]>
+Got a reply from Orion WS  
+{'customer devices': [{'DeviceId': 'FISHER', 'iv_External_Id__c': '1240608'}]}
+<Response [201]>

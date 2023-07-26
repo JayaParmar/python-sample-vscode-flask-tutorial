@@ -18,7 +18,6 @@ app = Flask(__name__)
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 engine = database.create_db_connection_pool()
 
-
 @app.route('/devices', methods=['GET'])
 def customer_id_detailed():
     customer_id = request.args.get('customer-id')      
@@ -41,7 +40,7 @@ def customer_id_device_id_only():
     return jsonify({'customer devices': cust_device_dict}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000, host='0.0.0.0')                             # This should be https://orion-dev.ivoclarvivadent.com:8444
+    app.run(debug=True, port=8444, host='0.0.0.0')                             # This should be https://orion-dev.ivoclarvivadent.com:8444
 
 
 

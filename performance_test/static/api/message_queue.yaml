@@ -1,0 +1,99 @@
+swagger: '2.0'
+info:
+  title: Message Queuing System API
+  version: 1.0.0
+paths:
+  /queue/create:
+    post:
+      summary: Create a new queue
+      parameters:
+        - in: body
+          name: Queue
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+      responses:
+        201:
+          description: Queue created successfully
+  /devices/{device-id}:
+    get:  
+      summary: Get details for given device id
+      parameters:
+        - in: query
+          name: device-id
+          type: string
+      responses:
+        200:
+          description: Messages retrieved successfully
+        404:
+          description: Queue not found
+        500:
+          description: Server error
+  #/queue/take:
+   #  post:
+    #   summary: Take a message from a queue
+     #  parameters:
+      #   - in: body
+       #    name: Queue
+        #   schema:
+         #    type: object
+          #   properties:
+           #    queue:
+            #     type: string
+       #responses:
+        # 200:
+         #  description: Message retrived successfully
+         #404:
+          # description: Queue not found
+  #/queue/read:
+  #  get:
+  #    summary: Read messages from a queue
+  #    parameters:
+  #      - in: query
+  #        name: queue
+  #        type: string
+  #    responses:
+  #      200:
+  #        description: Messages retrieved successfully
+  #      404:
+  #        description: Queue not found
+  #/queue/statistics:
+  #  get:
+  #    summary: Get statistics for all queues
+  #    responses:
+  #      200:
+  #        description: Queue statistics retrieved successfully
+  #/queue/reset:
+  #  post:
+  #    summary: Reset a queue
+  #    parameters:
+  #      - in: body
+  #        name: Queue
+  #        schema:
+  #          type: object
+  #          properties:
+  #            queue:
+  #              type: string
+  #    responses:
+  #      200:
+  #        description: Queue reset successfully
+  #      404:
+  #        description: Queue not found
+  #/queue/delete:
+  #  delete:
+  #    summary: Delete a queue
+  #    parameters:
+  #      - in: body
+  #        name: Queue
+  #        schema:
+  #          type: object
+  #          properties:
+  #            queue:
+  #              type: string
+  #    responses:
+  #      200:
+  #        description: Queue deleted successfully
+  #      404:
+  #        description: Queue not found
