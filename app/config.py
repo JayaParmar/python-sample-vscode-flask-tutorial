@@ -2,7 +2,6 @@ from os import environ as env
 from azure.identity import ClientSecretCredential
 from azure.keyvault.secrets import SecretClient
 import getpass
-import snowflake.connector
 
 #def get_connection():
 TENANT_ID = env.get("AZURE_TENANT_ID", "")

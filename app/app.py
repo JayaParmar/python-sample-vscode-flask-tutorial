@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_swagger_ui import get_swaggerui_blueprint
 import database
+import logging
 
 SWAGGER_URL = '/api'
 API_URL = '/static/test.yaml'
@@ -14,6 +15,10 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 )
 
 app = Flask(__name__)
+
+logging.basicConfig(filename='app.log', level=logging.INFO, 
+                    format='%(asctime)s [%(levelname)s] %(message)s', 
+                    datefmt='%Y-%m-%d %H:%M:%S')
 
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 engine = database.create_db_connection_pool()
@@ -37,6 +42,8 @@ def device_id():
 def customer_id_device_id_only():
     customer_id = request.args.get('customer-id')      
     cust_device_dict = database.get_customer_by_id(engine, customer_id)   
+    client_ip = request.remote_addr
+    logging.info('Client IP: %s', client_ip)
     return jsonify({'customer devices': cust_device_dict}), 200
 
 if __name__ == '__main__':
