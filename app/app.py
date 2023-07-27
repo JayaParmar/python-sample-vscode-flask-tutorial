@@ -16,11 +16,6 @@ swaggerui_blueprint = get_swaggerui_blueprint(
     }
 )
 
-app = Flask(__name__)
-
-app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
-engine = database.create_db_connection_pool()
-
 class FlaskLogger:
     def __init__(self, app):
         self.app = app
@@ -40,9 +35,14 @@ class FlaskLogger:
         logHandler.setLevel(logging.INFO)
         logHandler.setFormatter(formatter)              
         
-        self.app.logger.addHandler(logHandler)        
+        self.app.logger.addHandler(logHandler)  
 
+
+
+app = Flask(__name__)
 logger = FlaskLogger(app)
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+engine = database.create_db_connection_pool()
 
 @app.route('/devices', methods=['GET'])
 def customer_id_detailed():
@@ -75,3 +75,12 @@ def index():
     
 if __name__ == '__main__':
     app.run(debug=True, port=8444, host='0.0.0.0')                             # This should be https://orion-dev.ivoclarvivadent.com:8444     
+
+
+
+
+
+
+
+
+# https://medium.com/analytics-vidhya/setting-up-logging-in-python-and-flask-application-the-right-way-e4489c759e8d
