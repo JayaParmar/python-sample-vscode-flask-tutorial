@@ -2,8 +2,9 @@ from flask import Flask, jsonify, request
 from flask_swagger_ui import get_swaggerui_blueprint
 import database
 import logging
-import logging.handlers as handlers
-import os       
+import uuid 
+import os  
+from logging.handlers import TimedRotatingFileHandler
 
 SWAGGER_URL = '/api'
 API_URL = '/static/test.yaml'
@@ -16,33 +17,66 @@ swaggerui_blueprint = get_swaggerui_blueprint(
     }
 )
 
-class FlaskLogger:
-    def __init__(self, app):
-        self.app = app
-        self.setup_logger()
+class FlaskLogger(logging.LoggerAdapter):
+    def __init__(self, logger, extra=None):
+        super(FlaskLogger, self).__init__(logger, extra or {})
 
-    def setup_logger(self):
-        log_directory = '/var/log/log_new_orion/'
-        os.makedirs(log_directory, exist_ok=True)
-
-        self.app.logger = logging.getLogger('new_orion_app')
-        self.app.logger.setLevel(logging.INFO) 
-
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        
-        log_file_path_info = os.path.join(log_directory, 'normal.log')
-        logHandler = handlers.RotatingFileHandler(log_file_path_info, maxBytes=1024*1024, backupCount=5)
-        logHandler.setLevel(logging.INFO)
-        logHandler.setFormatter(formatter)              
-        
-        self.app.logger.addHandler(logHandler)  
-
-
+    def process(self, msg, kwargs):
+        """
+        Add extra information to the log message.
+        """
+        kwargs["extra"] = self.extra
+        return msg, kwargs
 
 app = Flask(__name__)
-logger = FlaskLogger(app)
+
+# Configuration for logging
+log_directory = '/var/log/log_new_orion/'
+log_file_path_info = os.path.join(log_directory, 'log_test.log')
+app.config["LOG_FILE"] = log_file_path_info
+app.config["LOG_LEVEL"] = logging.INFO
+
+def setup_logger():
+    logger = logging.getLogger("new_orion_app")
+    logger.setLevel(app.config["LOG_LEVEL"])
+    
+    formatter = logging.Formatter(
+        "%(asctime)s - %(levelname)s - [%(request_id)s] - [%(user_ip)s] - [%(cust_id)s] - %(message)s"
+    )
+
+    file_handler = TimedRotatingFileHandler(app.config["LOG_FILE"], when='midnight', backupCount=7)     # Creates daily log file with backup logs for last 7 days 
+    file_handler.setLevel(app.config["LOG_LEVEL"])
+    file_handler.setFormatter(formatter)
+    
+    logger.addHandler(file_handler)
+    return logger
+
+# Create an instance of FlaskLogger using the setup logger
+flask_logger = FlaskLogger(setup_logger(), extra={"user_ip": "", "request_id": "","cust_id": ""})
+
+@app.before_request
+def before_request():
+    """
+    Generate a unique request_id, user_ip and cust_id to the FlaskLogger extra.
+    """
+    flask_logger.extra["request_id"] = str(uuid.uuid4())
+
+    # Get the user IP address from the request
+    user_ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+    flask_logger.extra["user_ip"] = user_ip
+
+    # Get the cust_id from the request (assuming it's a query parameter)
+    cust_id = request.args.get("customer-id")
+    flask_logger.extra["cust_id"] = cust_id 
+ 
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 engine = database.create_db_connection_pool()
+
+# Error handler to catch exceptions and log them with the appropriate log level
+@app.errorhandler(Exception)
+def handle_error(error):
+    flask_logger.exception("An unhandled exception occurred.")
+    return "An unexpected error occurred.", 500
 
 @app.route('/devices', methods=['GET'])
 def customer_id_detailed():
@@ -60,23 +94,18 @@ def device_id():
 
 @app.route('/customer', methods=['GET'])
 def customer_id_device_id_only():
-    customer_id = request.args.get('customer-id')      
+    customer_id = request.args.get('customer-id')  
+    flask_logger.info(f'User access the customer id')      
     cust_device_dict = database.get_customer_by_id(engine, customer_id)   
     return jsonify({'customer devices': cust_device_dict}), 200
 
 @app.route('/')
-def index():
-    client_ip = request.remote_addr
-    user_agent = request.headers.get('User-Agent')
-    #cust_id = request.args.get('customer-id') 
-    #app.logger.info(f'User with IP {client_ip} and User-Agent {user_agent} viewed customer ID {cust_id}')
-    app.logger.info(f'User with IP {client_ip} and User-Agent {user_agent}')
+def index():    
+    flask_logger.info(f'User access the index page')    
     return 'Welcome to the Orion Customer Dashboard API'
     
 if __name__ == '__main__':
     app.run(debug=True, port=8444, host='0.0.0.0')                             # This should be https://orion-dev.ivoclarvivadent.com:8444     
-
-
 
 
 
