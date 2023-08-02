@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime 
+#from datetime import datetime 
 
 # reset orion-ws and orion-answer queue
 def reset_queues():
@@ -23,9 +23,17 @@ def put_messages_on_queue():
                 "message": f'customer id {cust_id}'}
         resp = requests.post(f'http://localhost:5555/queue/put', json=data)
         print(resp)
-        
+
+# delete/remove myqueue from queues
+def remove_queue():
+    #for name in ['myqueue']:
+    data = {"queue": "myqueue"} 
+    resp = requests.post(f'http://localhost:5555/queue/delete', json=data)
+    print(resp.text)
+
 if __name__ == '__main__':
     # create_queues()
     reset_queues()
     put_messages_on_queue()
+    # remove_queue()
     

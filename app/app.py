@@ -4,7 +4,7 @@ import database
 import logging
 import uuid 
 import os  
-from logging.handlers import TimedRotatingFileHandler
+from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
 
 SWAGGER_URL = '/api'
 API_URL = '/static/test.yaml'
@@ -21,6 +21,7 @@ class FlaskLogger(logging.LoggerAdapter):
     def __init__(self, logger, extra=None):
         super(FlaskLogger, self).__init__(logger, extra or {})
 
+    # Not in use
     def process(self, msg, kwargs):
         """
         Add extra information to the log message.
@@ -32,7 +33,7 @@ app = Flask(__name__)
 
 # Configuration for logging
 log_directory = '/var/log/log_new_orion/'
-log_file_path_info = os.path.join(log_directory, 'log_test.log')
+log_file_path_info = os.path.join(log_directory, 'log_app.log')
 app.config["LOG_FILE"] = log_file_path_info
 app.config["LOG_LEVEL"] = logging.INFO
 
@@ -43,12 +44,18 @@ def setup_logger():
     formatter = logging.Formatter(
         "%(asctime)s - %(levelname)s - [%(request_id)s] - [%(user_ip)s] - [%(cust_id)s] - %(message)s"
     )
-
-    file_handler = TimedRotatingFileHandler(app.config["LOG_FILE"], when='midnight', backupCount=7)     # Creates daily log file with backup logs for last 7 days 
-    file_handler.setLevel(app.config["LOG_LEVEL"])
-    file_handler.setFormatter(formatter)
     
-    logger.addHandler(file_handler)
+    # Creates daily log file at midnight with backup logs for last 7 days 
+    timed_handler = TimedRotatingFileHandler(app.config["LOG_FILE"], when='midnight', backupCount=7)      
+    timed_handler.setLevel(app.config["LOG_LEVEL"])
+    timed_handler.setFormatter(formatter)
+    logger.addHandler(timed_handler)
+
+    # Rotating when the log file reaches 50 MB and keeping at most 3 backup files
+    rotating_handler = RotatingFileHandler(app.config["LOG_FILE"], maxBytes=50 * 1024 * 1024, backupCount=3)
+    rotating_handler.setFormatter(formatter)
+    logger.addHandler(rotating_handler)
+
     return logger
 
 # Create an instance of FlaskLogger using the setup logger
@@ -56,16 +63,14 @@ flask_logger = FlaskLogger(setup_logger(), extra={"user_ip": "", "request_id": "
 
 @app.before_request
 def before_request():
-    """
-    Generate a unique request_id, user_ip and cust_id to the FlaskLogger extra.
-    """
+    # Generate a unique request_id, user_ip and cust_id to the FlaskLogger extra.
     flask_logger.extra["request_id"] = str(uuid.uuid4())
 
     # Get the user IP address from the request
     user_ip = request.headers.get("X-Forwarded-For", request.remote_addr)
     flask_logger.extra["user_ip"] = user_ip
 
-    # Get the cust_id from the request (assuming it's a query parameter)
+    # Get the cust_id from the request
     cust_id = request.args.get("customer-id")
     flask_logger.extra["cust_id"] = cust_id 
  
@@ -76,6 +81,7 @@ engine = database.create_db_connection_pool()
 @app.errorhandler(Exception)
 def handle_error(error):
     flask_logger.exception("An unhandled exception occurred.")
+    flask_logger.critical("CRITICAL: A critical error occurred!")
     return "An unexpected error occurred.", 500
 
 @app.route('/devices', methods=['GET'])
@@ -112,4 +118,3 @@ if __name__ == '__main__':
 
 
 
-# https://medium.com/analytics-vidhya/setting-up-logging-in-python-and-flask-application-the-right-way-e4489c759e8d

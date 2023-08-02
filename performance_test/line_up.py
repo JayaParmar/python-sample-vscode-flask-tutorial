@@ -133,7 +133,7 @@ def reset_queue():
     return jsonify({'message': 'Queue reset.'}), 200
 
 
-@app.route('/queue/delete', methods=['DELETE'])
+@app.route('/queue/delete', methods=['POST'])
 def delete_queue():
     queue_name = request.json.get('queue')
 
