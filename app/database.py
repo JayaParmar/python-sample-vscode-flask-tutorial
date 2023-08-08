@@ -4,7 +4,7 @@ import signal,sys
 
 def create_db_connection_pool():
     database_url = f'snowflake://{config.snowflake_config["user"]}:{config.snowflake_config["password"]}@{config.snowflake_config["account"]}/{config.snowflake_config["database"]}/{config.snowflake_config["schema"]}'
-    engine = create_engine(database_url, pool_size=5, max_overflow=10)
+    engine = create_engine(database_url, pool_size=30, max_overflow=10)    # pool_size = active connections to database to handle incoming requests
     # engine = enginemaker(bind=engine)
     return engine
 

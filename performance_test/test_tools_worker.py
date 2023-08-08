@@ -5,7 +5,7 @@ import time
 import sys 
 import os
 
-# one by one empty orion-ws queue and call orion-ws and record result on orion-answer queue
+
 def empty_messages_on_queue():
     empty = False
     while not empty:
@@ -20,7 +20,7 @@ def empty_messages_on_queue():
                 print(e)
                 time.sleep(10)
                 pass         
-            time.sleep(1)
+            time.sleep(0.1)
         if resp.json().get('message') == "Queue is empty.":
             empty = True
         else:
@@ -33,23 +33,24 @@ def empty_messages_on_queue():
                 sys.exit(1) 
             duration = resp.elapsed.total_seconds()
             ip_address = socket.gethostbyname(socket.gethostname())
-            #user_agent = resp.request.headers.get('User-Agent')
-        
-            
+            # user_agent = resp.request.headers.get('User-Agent')
+             
             print("Got a reply from Orion WS  ")
             print(resp.json())
             device_id = resp.json()
             process_id = os.getpid()
 
             payload = {
-                    "devices": f'response{device_id}',
-                    "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                    "process id": process_id,
-                    "duration": duration,
-                     "ip address": ip_address }
+                       "devices": f'response{device_id}',
+                       "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                       "process id": process_id,
+                       "duration": duration,
+                       "ip address": ip_address}
             data = {"queue": 'orion-answer', "message": payload}
-            resp = requests.post(f'http://localhost:5555/queue/put', json=data)
+            resp = requests.post('http://localhost:5555/queue/put', json=data)
             print(resp)
+
 
 if __name__ == '__main__':
     empty_messages_on_queue()
+    

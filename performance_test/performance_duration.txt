@@ -1,0 +1,87 @@
+Average duration per process: process_id
+32514    0.254726
+Name: duration, dtype: float64
+Total duration: process_id
+32514    59.860658
+Name: duration, dtype: float64
+Total jobs: process_id
+32514    235
+Name: duration, dtype: int64
+Average duration per process: process_id
+3092    0.171493
+3102    0.164952
+3135    0.185825
+Name: duration, dtype: float64
+Total duration: process_id
+3092    12.518970
+3102    12.866261
+3135    13.007733
+Name: duration, dtype: float64
+Total jobs: process_id
+3092    73
+3102    78
+3135    70
+Name: duration, dtype: int64
+Average duration per process: process_id
+5812    0.283485
+5866    0.239619
+5923    0.191853
+Name: duration, dtype: float64
+Total duration: process_id
+5812    20.410950
+5866    17.971407
+5923    15.731930
+Name: duration, dtype: float64
+Total jobs: process_id
+5812    72
+5866    75
+5923    82
+Name: duration, dtype: int64
+Average duration per process: process_id
+32514    0.254726
+Name: duration, dtype: float64
+Total duration: process_id
+32514    59.860658
+Name: duration, dtype: float64
+Total jobs: process_id
+32514    235
+Name: duration, dtype: int64
+Average duration per process: process_id
+3092    0.171493
+3102    0.164952
+3135    0.185825
+Name: duration, dtype: float64
+Total duration: process_id
+3092    12.518970
+3102    12.866261
+3135    13.007733
+Name: duration, dtype: float64
+Total jobs: process_id
+3092    73
+3102    78
+3135    70
+Name: duration, dtype: int64
+Average duration per process: process_id
+5812    0.283485
+5866    0.239619
+5923    0.191853
+Name: duration, dtype: float64
+Total duration: process_id
+5812    20.410950
+5866    17.971407
+5923    15.731930
+Name: duration, dtype: float64
+Total jobs: process_id
+5812    72
+5866    75
+5923    82
+Name: duration, dtype: int64
+Average duration per process: process_id
+32514    0.254726
+Name: duration, dtype: float64
+Total duration: process_id
+32514    59.860658
+Name: duration, dtype: float64
+Total jobs: process_id
+32514    235
+Name: duration, dtype: int64

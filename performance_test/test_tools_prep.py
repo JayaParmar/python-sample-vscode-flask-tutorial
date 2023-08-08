@@ -1,39 +1,41 @@
 import requests
-#from datetime import datetime 
 
-# reset orion-ws and orion-answer queue
+
 def reset_queues():
+    """reset orion-ws and orion-answer queue"""
     for name in ['orion-ws', 'orion-answer']:
         data = {"queue": name}
-        resp = requests.post(f'http://localhost:5555/queue/reset', json=data)
+        resp = requests.post('http://localhost:5555/queue/reset', json=data)
         print(resp.text)
 
-# create orion-ws and orion-answer queue
+
 def create_queues():
+    """Create orion-ws and orion-answer queue"""
     for name in ['orion-ws', 'orion-answer']:
         data = {"name": name}
-        resp = requests.post(f'http://localhost:5555/queue/create', json=data)
+        resp = requests.post('http://localhost:5555/queue/create', json=data)
         print(resp.text)
 
-# put 10 messages for calling orion ws on a queue called orion-ws
-def put_messages_on_queue():
-    for cust_id in [188934,164070, 164496, 3000090, 100002, 3010, 5010, 267038, 100002, 1240608]:
-        print(f"i is now {cust_id}")
-        data = {"queue": 'orion-ws', 
-                "message": f'customer id {cust_id}'}
-        resp = requests.post(f'http://localhost:5555/queue/put', json=data)
-        print(resp)
 
-# delete/remove myqueue from queues
+def put_messages_on_queue():
+    """put 10 messages for calling orion ws on a queue called orion-ws"""
+    for cust_id in [188934,164070,164496,3000090,1010,3000121,100002,191430,100396,697748,3010,218100,5010,267540,267068,267528,267365,266818,267674,267214,1240608,267038,267328,141815,172201,103228,100407,118664,1234083,191891,191901,983426,149798,255590,212994,980938,201790,1040754,155624,100327,156171,1235551,103219,155718,103223,197906,207386,157868,100005,191894,191962,141588,208624,245209,1050100,760400,208630,208659,208614,208632,208666,208658,208615,762182,212559,191979,103237,687228,1299424,933822,224956,100259,6877484,849560,855593,811883,204339,694374,689220,100238,1322880,156095,100057,101947,154692,138120,1066544,156192,155915,245467,214952,140604,100233,252493,192499,155696,103249,103196,103231,103459,104017,100258,103245,103186,103247,103243,103236,103238,103229,100257,100242,100304,100275,100265,100268,100028,214788,207499,206601,201792,206484,206712,202579,201789,155549,160047,155591,161007,155604,155901,155729,191959,156264,161423,155749,157258,155730,156005,156798,155878,156227,156119,156090,154448,156020,155919,155823,152905,155785,155736,155669,154893,141920,141820,142000,142050,141851,141804,142037,141888,141834,141865,141692,141790,141762,141687,141633,141726,138443,715009,236884,255351,254867,253722,246348,233810,233156,242772,228787,224120,224430,224815,222478,221168,224379,220351,1253872,219527,216435,6878510,1319268,1245548,1251873,6657651,1196155,1303675,1184298,1180751,1163842,1180081,1156617,1140766,1122754,1094139,1077007,1071323,1019672,933784,1018500,980977,934042,761874,841401,166082,165041,207590,155518,273347,1251800,270712,268977,1314369,272927,253454,253414,264196,264211,268220,6885660,6031268,6031594,1079166,1337309,256199,155612]:
+        print(f"i is now {cust_id}")
+        data = {"queue": 'orion-ws',
+                "message": f'customer id {cust_id}'}
+        resp = requests.post('http://localhost:5555/queue/put', json=data)
+        print(resp)
+        
+
 def remove_queue():
-    #for name in ['myqueue']:
+    """delete/remove myqueue from queues"""
     data = {"queue": "myqueue"} 
-    resp = requests.post(f'http://localhost:5555/queue/delete', json=data)
+    resp = requests.post('http://localhost:5555/queue/delete', json=data)
     print(resp.text)
+
 
 if __name__ == '__main__':
     # create_queues()
     reset_queues()
     put_messages_on_queue()
     # remove_queue()
-    

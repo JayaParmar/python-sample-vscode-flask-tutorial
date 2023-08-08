@@ -1,10 +1,10 @@
 from flask import Flask, jsonify, request
 import sqlite3
-#from werkzeug.local import LocalProxy
 from flask_swagger_ui import get_swaggerui_blueprint
 
 SWAGGER_URL = '/api/docs'  # URL for accessing the Swagger UI
-API_URL = '/static/api/line_up.yaml'  # URL where your Swagger YAML file is served
+API_URL = '/static/api/line_up.yaml'
+# URL where your Swagger YAML file is served
 
 swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,

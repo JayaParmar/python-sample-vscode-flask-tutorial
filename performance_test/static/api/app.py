@@ -6,7 +6,6 @@ import uuid
 import os
 from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
 
-
 SWAGGER_URL = '/api'
 API_URL = '/static/test.yaml'
 

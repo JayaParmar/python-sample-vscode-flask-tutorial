@@ -3,7 +3,6 @@ from azure.identity import ClientSecretCredential
 from azure.keyvault.secrets import SecretClient
 import getpass
 
-
 # Get connection to Azure Portal
 key_vault_name="wf-kv"
 tenant_id = "87056191-b882-40a4-a668-0b4b65f51e55"

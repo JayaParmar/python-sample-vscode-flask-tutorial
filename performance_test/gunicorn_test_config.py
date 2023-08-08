@@ -17,4 +17,4 @@ timeout = 3600
 
 # The WSGI application to be run by Gunicorn.
 # Replace 'app' with the actual name of your Flask app object.
-app = 'test_tools:app'
+app = 'test_tools_worker:app'
