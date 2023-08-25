@@ -1,0 +1,5 @@
+<form method="POST" action="/add_user">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    {{ form.username.label }} {{ form.username }}
+    <button type="submit">Add User</button>
+</form>

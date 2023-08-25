@@ -8,7 +8,7 @@ SAML_SETTINGS = {
     'strict': True,
     'debug': False,
     'sp': {
-        'entityId': 'your_sp_entity_id',
+        'entityId': 'your_sp_entity_id',               # this is the client secret from MS Azure app registration
         'assertionConsumerService': {
             'url': 'http://localhost:5000/sso/acs',
             'binding': 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
@@ -16,7 +16,7 @@ SAML_SETTINGS = {
         # Add more SP settings as needed
     },
     'idp': {
-        'entityId': 'your_idp_entity_id',
+        'entityId': 'your_idp_entity_id',            # client email
         'singleSignOnService': {
             'url': 'https://idp.example.com/sso',
             'binding': 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
