@@ -12,7 +12,6 @@ azureServiceConnectionId:'8097d5da-bc60-4b33-8e28-5e0792240e62'
 
 webAppName:'testorion'
 
-# Agent VM image name
 pool:
   vmImage: ubuntu-latest
 
