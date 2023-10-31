@@ -7,8 +7,8 @@ trigger:
 - master
 - test_devops
 
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+-pool:
+vmImageName: 'ubuntu-latest'
 
   # Environment name
   environmentName: 'testorion'
