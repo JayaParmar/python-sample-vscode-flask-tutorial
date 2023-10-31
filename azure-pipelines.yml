@@ -7,9 +7,6 @@ trigger:
 - master
 - test_devops
 
-  # Web app name
-  webAppName: 'testorion'
-
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
