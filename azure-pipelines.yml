@@ -7,10 +7,6 @@ trigger:
 - master
 - test_devops
 
-variables:
-  # Azure Resource Manager connection created during pipeline creation
-  azureServiceConnectionId: '8097d5da-bc60-4b33-8e28-5e0792240e62'
-
   # Web app name
   webAppName: 'testorion'
 
