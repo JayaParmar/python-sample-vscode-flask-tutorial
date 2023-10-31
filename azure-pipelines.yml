@@ -17,11 +17,19 @@ azureServiceConnectionId: '8097d5da-bc60-4b33-8e28-5e0792240e62'
 pool:
   vmImage: ubuntu-latest
 
-# Environment Name
-environmentName: 'testorion'
-
-# Project root folder
-projectRoot: new_orion
+steps:
+    - task: UsePythonVersion@0
+       inputs:
+         versionSpec: '$(pythonVersion)'
+         displayName: 'Use Python $(pythonVersion)'
+    - script: |
+         python -m venv antenv
+         source antenv/bin/activate
+         python -m pip install --upgrade pip
+         pip install setup
+         pip install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
+       workingDirectory: $(projectRoot)
+       displayName: "Install requirements"
 
 appendCommitMessageToRunName:
 steps:
