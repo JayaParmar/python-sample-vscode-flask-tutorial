@@ -4,37 +4,90 @@
 # https://aka.ms/yaml
 
 trigger:
+- master
 - test_devops
 
 variables:
-# Azure Resource Manager connection created during pipeline creation
-azureServiceConnectionId:'8097d5da-bc60-4b33-8e28-5e0792240e62'
+  # Azure Resource Manager connection created during pipeline creation
+  azureServiceConnectionId: '8097d5da-bc60-4b33-8e28-5e0792240e62'
 
-webAppName:'testorion'
+  # Web app name
+  webAppName: 'testorion'
 
-pool:
-  vmImage: ubuntu-latest
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
 
-steps:
+  # Environment name
+  environmentName: 'testorion'
+
+  # Project root folder. 
+  projectRoot: python-flask-app-example 
+  pythonVersion: '3.10'
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: BuildJob
+    pool:
+      vmImage: $(vmImageName)
+    steps:
     - task: UsePythonVersion@0
-       inputs:
+      inputs:
         versionSpec: '$(pythonVersion)'
-        displayName: 'Use Python $(pythonVersion)'
+      displayName: 'Use Python $(pythonVersion)'
+
     - script: |
         python -m venv antenv
         source antenv/bin/activate
         python -m pip install --upgrade pip
         pip install setup
-        pip install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
-       workingDirectory: $(projectRoot)
-       displayName: "Install requirements"
+        pip install -r requirements.txt
+      workingDirectory: $(projectRoot)
+      displayName: "Install requirements"
 
-appendCommitMessageToRunName:
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+    - script: |
+        source antenv/bin/activate
+        pip install pytest pytest-azurepipelines
+        pytest tests/
+      workingDirectory: $(projectRoot)
+      displayName: 'Run tests'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: '$(projectRoot)'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      displayName: 'Upload package'
+      artifact: drop
+
+- stage: Deploy
+  displayName: 'Deploy Web App'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: DeploymentJob
+    pool:
+      vmImage: $(vmImageName)
+    environment: $(environmentName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '$(pythonVersion)'
+            displayName: 'Use Python version'
+
+          - task: AzureWebApp@1
+            displayName: 'Deploy Azure Web App : metricsws-af'
+            inputs:
+              azureSubscription: $(azureServiceConnectionId)
+              appName: $(webAppName)
+              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
